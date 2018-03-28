@@ -5,4 +5,10 @@ package com.summer.record.ui.main.text;
 import com.android.lib.base.fragment.BaseUIFrag;
 
 public class TextFrag extends BaseUIFrag<TextUIOpe,TextDAOpe>{
+
+    @Override
+    public void initdelay() {
+        super.initdelay();
+        getP().getU().initTexts(getP().getD().getTexts());
+    }
 }

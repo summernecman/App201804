@@ -21,4 +21,6 @@ public class MainValue {
     public static final int 文字ID = R.id.contain_text;
 
     public static final int 设置ID = R.id.contain_setting;
+
+    public static final String[] 模块 = new String[]{视频,图片,文字,设置};
 }
