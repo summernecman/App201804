@@ -5,6 +5,13 @@ package com.summer.record.app;
 import com.android.lib.aplication.LibAplication;
 
 public class RecordApp extends LibAplication {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initDB();
+    }
+
     @Override
     public void initImagePicker() {
 

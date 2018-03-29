@@ -9,13 +9,14 @@ import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.summer.record.data.image.Image;
 import com.summer.record.databinding.FragMainImageImagedetailBinding;
+import com.summer.record.ui.main.image.image.UIImage;
 import com.summer.record.ui.main.image.imagedetail.imageshow.ImageShowFrag;
 
 import java.util.ArrayList;
 
 public class ImageDetailUIOpe extends BaseUIOpe<FragMainImageImagedetailBinding> {
 
-    public void initImages(final ArrayList<Image> images){
+    public void initImages(final ArrayList<UIImage> images, int pos){
         bind.viewpager.setAdapter(new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -27,5 +28,6 @@ public class ImageDetailUIOpe extends BaseUIOpe<FragMainImageImagedetailBinding>
                 return images.size();
             }
         });
+        bind.viewpager.setCurrentItem(pos);
     }
 }

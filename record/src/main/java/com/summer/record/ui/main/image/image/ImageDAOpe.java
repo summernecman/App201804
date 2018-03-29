@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.android.lib.base.interf.OnFinishWithObjI;
 import com.android.lib.base.ope.BaseDAOpe;
 import com.android.lib.util.data.DateFormatUtil;
+import com.summer.record.data.image.Image;
 import com.summer.record.tool.FileTool;
 
 import java.text.DateFormat;
@@ -18,9 +19,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ImageDAOpe extends BaseDAOpe {
 
-
+    private ArrayList<UIImage> images;
 
     public void getImages(final Context context, final OnFinishWithObjI i){
         long a = System.currentTimeMillis();
@@ -83,6 +89,7 @@ public class ImageDAOpe extends BaseDAOpe {
                     }
                     v.addAll(map.get(ss.get(i)));
                 }
+                setImages(v);
                 return v;
             }
 

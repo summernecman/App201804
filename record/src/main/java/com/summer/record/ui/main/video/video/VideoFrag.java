@@ -15,6 +15,8 @@ import com.summer.record.ui.main.video.videoplay.VideoPlayFrag;
 
 import java.util.ArrayList;
 
+import butterknife.OnClick;
+
 public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements ViewListener{
 
     @Override
@@ -29,6 +31,15 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
         });
     }
 
+    @OnClick({R.id.iv_add})
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()){
+            case R.id.iv_add:
+
+                break;
+        }
+    }
 
     @Override
     public void onInterupt(int i, View view) {

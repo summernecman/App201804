@@ -24,5 +24,14 @@
             <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
     </activity>
+
+        <service android:name=".service.ClipSevice"/>
     </application>
+
+
+    <uses-permission android:name="android.permission.GET_CLIPS" />
+    <uses-permission android:name="android.permission.READ_CLIPS" />
+    <uses-permission android:name="android.permission.WRITE_CLIPS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 </manifest>

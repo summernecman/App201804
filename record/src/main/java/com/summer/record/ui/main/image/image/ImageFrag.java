@@ -9,6 +9,7 @@ import com.android.lib.base.interf.OnFinishWithObjI;
 import com.android.lib.base.listener.ViewListener;
 import com.android.lib.constant.ValueConstant;
 import com.android.lib.util.fragment.two.FragManager2;
+import com.summer.record.R;
 import com.summer.record.data.image.Image;
 import com.summer.record.ui.main.image.imagedetail.ImageDetailFrag;
 import com.summer.record.ui.main.main.MainValue;
@@ -24,9 +25,7 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,ImageDAOpe> implements Vie
         getP().getD().getImages(getBaseAct(), new OnFinishWithObjI() {
             @Override
             public void onNetFinish(Object o) {
-                getArguments().putSerializable(ValueConstant.DATA_DATA, (Serializable) o);
-                ArrayList<UIImage> images = (ArrayList<UIImage>) o;
-                getP().getU().loadImages(images,ImageFrag.this);
+                getP().getU().loadImages(getP().getD().getImages(),ImageFrag.this);
             }
         });
     }
@@ -35,7 +34,7 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,ImageDAOpe> implements Vie
     public void onInterupt(int i, View view) {
         switch (i){
             case ViewListener.TYPE_ONCLICK:
-                FragManager2.getInstance().start(getBaseUIAct(), MainValue.图片,ImageDetailFrag.getInstance((ArrayList<Image>) getArguments().getSerializable(ValueConstant.DATA_DATA)));
+                FragManager2.getInstance().start(getBaseUIAct(), MainValue.图片,ImageDetailFrag.getInstance(getP().getD().getImages(), (Integer) view.getTag(R.id.position)));
                 break;
         }
     }

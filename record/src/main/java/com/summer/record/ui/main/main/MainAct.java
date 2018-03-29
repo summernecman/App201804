@@ -2,6 +2,12 @@ package com.summer.record.ui.main.main;
 
 //by summer on 2018-03-27.
 
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +16,17 @@ import com.android.lib.base.activity.BaseUIActivity;
 import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.base.interf.view.OnAppItemSelectListener;
 import com.android.lib.util.LogUtil;
+import com.android.lib.util.ToastUtil;
 import com.android.lib.util.fragment.two.FragManager2;
 import com.android.lib.util.system.PermissionUtil;
+import com.raizlabs.android.dbflow.sql.language.Select;
+import com.summer.record.service.ClipSevice;
 import com.summer.record.ui.main.image.image.ImageFrag;
 import com.summer.record.ui.main.sett.SettFrag;
 import com.summer.record.ui.main.text.TextFrag;
 import com.summer.record.ui.main.video.video.VideoFrag;
+
+import java.util.ArrayList;
 
 public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAppItemSelectListener {
 
@@ -33,6 +44,7 @@ public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAp
         FragManager2.getInstance().start(this,MainValue.图片,MainValue.图片ID,new ImageFrag());
         FragManager2.getInstance().start(this,MainValue.文字,MainValue.文字ID,new TextFrag());
         FragManager2.getInstance().start(this,MainValue.设置,MainValue.设置ID,new SettFrag());
+        startService(new Intent(this, ClipSevice.class));
     }
 
     @Override
@@ -49,7 +61,6 @@ public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAp
 
     @Override
     public void onBackPressed() {
-        LogUtil.E("onBackPressed");
         BaseUIFrag baseUIFrag = FragManager2.getInstance().getCurrentFrag(getMoudle());
         if(baseUIFrag!=null&&baseUIFrag.getFragM()!=null) {
             FragManager2 fragManager2 = baseUIFrag.getFragM();
@@ -58,4 +69,5 @@ public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAp
             }
         }
     }
+
 }

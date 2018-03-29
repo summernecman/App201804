@@ -35,9 +35,9 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
                 super.onBindViewHolder(holder, position);
                 ItemVideoVideoBinding itemVideoVideoBinding = (ItemVideoVideoBinding) holder.viewDataBinding;
                 if(videos.get(position).getId()!=-1){
-                    GlideApp.with(context).asBitmap().centerCrop().load(videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
+                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
                 }else{
-                    GlideApp.with(context).asBitmap().centerCrop().load(R.color.black).into(itemVideoVideoBinding.ivVideo);
+                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(R.color.black).into(itemVideoVideoBinding.ivVideo);
                 }
             }
         });

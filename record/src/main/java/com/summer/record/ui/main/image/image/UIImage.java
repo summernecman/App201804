@@ -31,6 +31,5 @@ public class UIImage extends Image {
         DateFormat df=new SimpleDateFormat(DateFormatUtil.YYYY_MM_DD);
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateStr = df.format(d);
-        LogUtil.E(dateStr);
     }
 }

@@ -4,10 +4,15 @@ package com.summer.record.ui.main.video.videoplay;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.android.lib.GlideApp;
 import com.android.lib.base.interf.OnFinishListener;
 import com.android.lib.base.ope.BaseUIOpe;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.summer.record.R;
 import com.summer.record.data.video.Video;
 import com.summer.record.databinding.FragMainVideoVideoplayBinding;
 
@@ -26,6 +31,15 @@ public class VideoPlayUIOpe extends BaseUIOpe<FragMainVideoVideoplayBinding> {
         bind.videoplayer.getBackButton().setVisibility(View.GONE);
         bind.videoplayer.getTitleTextView().setVisibility(View.GONE);
 
+        ImageView imageView = new ImageView(context);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        bind.videoplayer.setThumbImageView(imageView);
+        Glide.with(context).setDefaultRequestOptions(
+                new RequestOptions()
+                        .frame(3000000)
+                        .centerCrop())
+                .load(video.getPath())
+                .into(imageView);
 
         //关闭自动旋转
         bind.videoplayer.setRotateViewAuto(false);

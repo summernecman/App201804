@@ -35,9 +35,9 @@ public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
                 super.onBindViewHolder(holder, position);
                 ItemImageImageBinding itemImageImageBinding = (ItemImageImageBinding) holder.viewDataBinding;
                 if(images.get(position).getId()!=-1){
-                    GlideApp.with(context).asBitmap().centerCrop().load(images.get(position).getUri()).into(itemImageImageBinding.ivImage);
+                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(images.get(position).getUri()).into(itemImageImageBinding.ivImage);
                 }else{
-                    GlideApp.with(context).asBitmap().centerCrop().load(R.color.black).into(itemImageImageBinding.ivImage);
+                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(R.color.black).into(itemImageImageBinding.ivImage);
                 }
             }
         });
