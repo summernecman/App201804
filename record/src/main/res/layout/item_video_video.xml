@@ -3,7 +3,7 @@
     <data>
         <variable
             name="item_video_video"
-            type="com.summer.record.data.video.Video" />
+            type="com.summer.record.data.video.Record" />
     </data>
 
     <android.support.constraint.ConstraintLayout

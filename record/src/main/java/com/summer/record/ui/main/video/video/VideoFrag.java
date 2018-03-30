@@ -5,11 +5,17 @@ package com.summer.record.ui.main.video.video;
 import android.view.View;
 
 import com.android.lib.base.fragment.BaseUIFrag;
+import com.android.lib.base.interf.OnFinishListener;
 import com.android.lib.base.interf.OnFinishWithObjI;
 import com.android.lib.base.listener.ViewListener;
+import com.android.lib.bean.BaseBean;
+import com.android.lib.network.bean.res.BaseResBean;
+import com.android.lib.network.news.NetAdapter;
+import com.android.lib.network.news.UINetAdapter;
+import com.android.lib.util.LogUtil;
 import com.android.lib.util.fragment.two.FragManager2;
 import com.summer.record.R;
-import com.summer.record.data.video.Video;
+import com.summer.record.data.video.Record;
 import com.summer.record.ui.main.main.MainValue;
 import com.summer.record.ui.main.video.videoplay.VideoPlayFrag;
 
@@ -25,18 +31,41 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
         getP().getD().getVideos(getBaseAct(), new OnFinishWithObjI() {
             @Override
             public void onNetFinish(Object o) {
-                ArrayList<UIVideo> videos = (ArrayList<UIVideo>) o;
-                getP().getU().loadVideos(videos,VideoFrag.this);
+                getP().getD().setVideos((ArrayList<Record>) o);
+                getP().getU().loadVideos(getP().getD().getVideos(),VideoFrag.this);
             }
         });
     }
 
-    @OnClick({R.id.iv_add})
+    @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()){
             case R.id.iv_add:
 
+                break;
+            case R.id.tv_refresh:
+                getP().getD().updateVideos(getBaseAct(), getP().getD().getNoNullVideos(), new UINetAdapter<BaseBean>(getBaseUIFrag()) {
+                    @Override
+                    public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
+                        super.onNetFinish(haveData, url, baseResBean);
+                        LogUtil.E("onNetFinish");
+                    }
+                });
+                break;
+            case R.id.tv_upload:
+                v.setSelected(!v.isSelected());
+                getP().getD().setIndex(0);
+                if(!v.isSelected()){
+                    getP().getD().setIndex(getP().getD().getNoNullVideos().size());
+                    return;
+                }
+                getP().getD().uploadVideos(getBaseUIAct(), getP().getD().getNoNullVideos(), new OnFinishListener() {
+                    @Override
+                    public void onFinish(Object o) {
+                        LogUtil.E(o);
+                    }
+                });
                 break;
         }
     }
@@ -45,7 +74,7 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
     public void onInterupt(int i, View view) {
         switch (i){
             case ViewListener.TYPE_ONCLICK:
-                FragManager2.getInstance().start(getBaseUIAct(), MainValue.视频, VideoPlayFrag.getInstance((Video) view.getTag(R.id.data)));
+                FragManager2.getInstance().start(getBaseUIAct(), MainValue.视频, VideoPlayFrag.getInstance((Record) view.getTag(R.id.data)));
                 break;
         }
     }

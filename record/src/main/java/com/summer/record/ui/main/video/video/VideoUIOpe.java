@@ -18,6 +18,7 @@ import com.android.lib.bean.AppViewHolder;
 import com.android.lib.util.ScreenUtil;
 import com.summer.record.BR;
 import com.summer.record.R;
+import com.summer.record.data.video.Record;
 import com.summer.record.databinding.FragMainVideoBinding;
 import com.summer.record.databinding.ItemVideoVideoBinding;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
 
 
-    public void loadVideos(final ArrayList<UIVideo> videos, ViewListener listener){
+    public void loadVideos(final ArrayList<Record> videos, ViewListener listener){
 
         bind.recycle.setLayoutManager(new GridLayoutManager(context,4));
         bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_video_video, BR.item_video_video,videos,listener){

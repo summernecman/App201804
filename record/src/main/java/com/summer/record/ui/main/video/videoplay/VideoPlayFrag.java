@@ -8,12 +8,12 @@ import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.constant.ValueConstant;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.summer.record.data.video.Video;
+import com.summer.record.data.video.Record;
 
 public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
 
 
-    public static VideoPlayFrag getInstance(Video video){
+    public static VideoPlayFrag getInstance(Record video){
         VideoPlayFrag videoPlayFrag = new VideoPlayFrag();
         videoPlayFrag.setArguments(new Bundle());
         videoPlayFrag.getArguments().putSerializable(ValueConstant.DATA_DATA,video);
@@ -23,7 +23,7 @@ public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
     @Override
     public void initNow() {
         super.initNow();
-        getP().getU().play((Video) getArguments().getSerializable(ValueConstant.DATA_DATA));
+        getP().getU().play((Record) getArguments().getSerializable(ValueConstant.DATA_DATA));
     }
 
     @Override

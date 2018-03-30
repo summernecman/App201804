@@ -27,7 +27,7 @@ public class UIImage extends Image {
 
     public UIImage(int id, String name, String type, String width, String height, long date, String path) {
         super(id, name, type, width, height, date, path);
-        Date d=new Date(date*1000);
+        Date d=new Date(date);
         DateFormat df=new SimpleDateFormat(DateFormatUtil.YYYY_MM_DD);
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateStr = df.format(d);

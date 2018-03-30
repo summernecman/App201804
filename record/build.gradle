@@ -36,4 +36,5 @@ dependencies {
     compile 'com.github.summernecman:ALib:v1.0.4'
     compile 'com.shuyu:GSYVideoPlayer:4.1.0'
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4"
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

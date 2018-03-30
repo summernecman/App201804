@@ -7,29 +7,30 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.summer.record.data.video.Record;
 import com.summer.record.ui.main.image.image.UIImage;
-import com.summer.record.ui.main.video.video.UIVideo;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class FileTool {
 
-    public static ArrayList<UIVideo> getVideos(Context context){
+    public static ArrayList<Record> getVideos(Context context){
         ContentResolver contentResolver = context.getContentResolver();
-        ArrayList<UIVideo> videos = new ArrayList<>();
+        ArrayList<Record> videos = new ArrayList<>();
         Cursor cursor = contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,null,null,null,MediaStore.Video.Media.DATE_MODIFIED+" desc");
         while (cursor.moveToNext()){
             File file = new File(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)));
             if(!file.exists()){
                 continue;
             }
-            videos.add(new UIVideo(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)),
+            videos.add(new Record(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)),
+                    file.getPath(),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED))*1000,
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED))*1000,
                     cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)),
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED)),
-                    file.getPath()
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME))
+
                     ));
         }
         return  videos;
@@ -49,7 +50,7 @@ public class FileTool {
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.WIDTH)),
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.HEIGHT)),
-                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED)),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED))*1000,
                     file.getPath()
             ));
         }

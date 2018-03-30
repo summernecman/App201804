@@ -13,15 +13,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.summer.record.R;
-import com.summer.record.data.video.Video;
+import com.summer.record.data.video.Record;
 import com.summer.record.databinding.FragMainVideoVideoplayBinding;
 
 import java.io.File;
 
 public class VideoPlayUIOpe extends BaseUIOpe<FragMainVideoVideoplayBinding> {
 
-    public void play(Video video) {
-        bind.videoplayer.setUp(video.getPath(), false, new File(""), "视频播放");
+    public void play(Record video) {
+        bind.videoplayer.setUp(video.getLocpath(), false, new File(""), "视频播放");
         //外部辅助的旋转，帮助全屏
         final OrientationUtils orientationUtils = new OrientationUtils((Activity) context, bind.videoplayer);
         //初始化不打开外部的旋转
@@ -38,7 +38,7 @@ public class VideoPlayUIOpe extends BaseUIOpe<FragMainVideoVideoplayBinding> {
                 new RequestOptions()
                         .frame(3000000)
                         .centerCrop())
-                .load(video.getPath())
+                .load(video.getLocpath())
                 .into(imageView);
 
         //关闭自动旋转
