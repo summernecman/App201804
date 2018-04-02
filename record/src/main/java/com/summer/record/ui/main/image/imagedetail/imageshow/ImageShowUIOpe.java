@@ -4,13 +4,13 @@ package com.summer.record.ui.main.image.imagedetail.imageshow;
 
 import com.android.lib.GlideApp;
 import com.android.lib.base.ope.BaseUIOpe;
-import com.summer.record.data.image.Image;
+import com.summer.record.data.Record;
 import com.summer.record.databinding.FragMainImageImagedetailImageBinding;
 
 public class ImageShowUIOpe extends BaseUIOpe<FragMainImageImagedetailImageBinding> {
 
-    public void showImage(Image image){
-        GlideApp.with(context).asBitmap().centerInside().load(image.getPath()).into(bind.ivImage);
+    public void showImage(Record image){
+        GlideApp.with(context).asBitmap().centerInside().load(image.getLocpath()).into(bind.ivImage);
 
     }
 }

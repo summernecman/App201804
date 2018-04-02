@@ -10,20 +10,21 @@ import com.android.lib.base.interf.OnFinishWithObjI;
 import com.android.lib.base.listener.ViewListener;
 import com.android.lib.bean.BaseBean;
 import com.android.lib.network.bean.res.BaseResBean;
-import com.android.lib.network.news.NetAdapter;
 import com.android.lib.network.news.UINetAdapter;
+import com.android.lib.util.GsonUtil;
 import com.android.lib.util.LogUtil;
 import com.android.lib.util.fragment.two.FragManager2;
 import com.summer.record.R;
-import com.summer.record.data.video.Record;
+import com.summer.record.data.Record;
 import com.summer.record.ui.main.main.MainValue;
+import com.summer.record.ui.main.record.RecordDAOpe;
 import com.summer.record.ui.main.video.videoplay.VideoPlayFrag;
 
 import java.util.ArrayList;
 
 import butterknife.OnClick;
 
-public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements ViewListener{
+public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements ViewListener{
 
     @Override
     public void initdelay() {
@@ -31,8 +32,8 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
         getP().getD().getVideos(getBaseAct(), new OnFinishWithObjI() {
             @Override
             public void onNetFinish(Object o) {
-                getP().getD().setVideos((ArrayList<Record>) o);
-                getP().getU().loadVideos(getP().getD().getVideos(),VideoFrag.this);
+                getP().getD().setRecords((ArrayList<Record>) o);
+                getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
             }
         });
     }
@@ -45,11 +46,26 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
 
                 break;
             case R.id.tv_refresh:
-                getP().getD().updateVideos(getBaseAct(), getP().getD().getNoNullVideos(), new UINetAdapter<BaseBean>(getBaseUIFrag()) {
+                getP().getD().updateRecords(getBaseAct(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new UINetAdapter<BaseBean>(getBaseUIFrag()) {
                     @Override
                     public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
                         super.onNetFinish(haveData, url, baseResBean);
-                        LogUtil.E("onNetFinish");
+                        LogUtil.E(GsonUtil.getInstance().toJson(baseResBean));
+
+                        getP().getD().getAllRecords(getBaseAct(),Record.ATYPE_VIDEO, new UINetAdapter<ArrayList<Record>>(getBaseUIFrag()) {
+                            @Override
+                            public void onSuccess(ArrayList<Record> o) {
+                                super.onSuccess(o);
+                                getP().getD().setRecords(getP().getD().dealRecord(o));
+                                getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
+                            }
+
+                            @Override
+                            public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
+                                super.onNetFinish(haveData, url, baseResBean);
+                                getP().getU().updateTitle(baseResBean.getOther());
+                            }
+                        });
                     }
                 });
                 break;
@@ -57,10 +73,10 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,VideoDAOpe> implements View
                 v.setSelected(!v.isSelected());
                 getP().getD().setIndex(0);
                 if(!v.isSelected()){
-                    getP().getD().setIndex(getP().getD().getNoNullVideos().size());
+                    getP().getD().setIndex(getP().getD().getNoNullRecords(getP().getD().getRecords()).size());
                     return;
                 }
-                getP().getD().uploadVideos(getBaseUIAct(), getP().getD().getNoNullVideos(), new OnFinishListener() {
+                getP().getD().uploadRecords(getBaseUIAct(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
                         LogUtil.E(o);

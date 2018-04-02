@@ -7,11 +7,11 @@ import android.os.Bundle;
 import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.android.lib.constant.ValueConstant;
-import com.summer.record.data.image.Image;
+import com.summer.record.data.Record;
 
 public class ImageShowFrag extends BaseUIFrag<ImageShowUIOpe,ImageShowDAOpe> {
 
-    public static ImageShowFrag getInstance(Image image){
+    public static ImageShowFrag getInstance(Record image){
         ImageShowFrag imageShowFrag = new ImageShowFrag();
         imageShowFrag.setArguments(new Bundle());
         imageShowFrag.getArguments().putSerializable(ValueConstant.DATA_DATA,image);
@@ -22,6 +22,6 @@ public class ImageShowFrag extends BaseUIFrag<ImageShowUIOpe,ImageShowDAOpe> {
     @Override
     public void initNow() {
         super.initNow();
-        getP().getU().showImage((Image) getArguments().getSerializable(ValueConstant.DATA_DATA));
+        getP().getU().showImage((Record) getArguments().getSerializable(ValueConstant.DATA_DATA));
     }
 }

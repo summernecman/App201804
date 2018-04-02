@@ -16,8 +16,10 @@ import com.android.lib.base.listener.ViewListener;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.android.lib.bean.AppViewHolder;
 import com.android.lib.util.ScreenUtil;
+import com.android.lib.util.StringUtil;
 import com.summer.record.BR;
 import com.summer.record.R;
+import com.summer.record.data.Record;
 import com.summer.record.databinding.FragMainImageBinding;
 import com.summer.record.databinding.ItemImageImageBinding;
 
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
 
 
-    public void loadImages(final ArrayList<UIImage> images, ViewListener listener){
+    public void loadImages(final ArrayList<Record> images, ViewListener listener){
 
         bind.recycle.setLayoutManager(new GridLayoutManager(context,4));
         bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_image_image, BR.item_image_image,images,listener){
@@ -34,11 +36,7 @@ public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
             public void onBindViewHolder(AppViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
                 ItemImageImageBinding itemImageImageBinding = (ItemImageImageBinding) holder.viewDataBinding;
-                if(images.get(position).getId()!=-1){
-                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(images.get(position).getUri()).into(itemImageImageBinding.ivImage);
-                }else{
-                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(R.color.black).into(itemImageImageBinding.ivImage);
-                }
+                GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(images.get(position).isNull()?R.color.black:images.get(position).getUri()).into(itemImageImageBinding.ivImage);
             }
         });
         final Paint paint = new Paint();
@@ -73,5 +71,9 @@ public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
                 }
             }
         });
+    }
+
+    public void updateTitle(Object o){
+        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
     }
 }

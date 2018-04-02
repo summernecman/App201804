@@ -16,9 +16,10 @@ import com.android.lib.base.listener.ViewListener;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.android.lib.bean.AppViewHolder;
 import com.android.lib.util.ScreenUtil;
+import com.android.lib.util.StringUtil;
 import com.summer.record.BR;
 import com.summer.record.R;
-import com.summer.record.data.video.Record;
+import com.summer.record.data.Record;
 import com.summer.record.databinding.FragMainVideoBinding;
 import com.summer.record.databinding.ItemVideoVideoBinding;
 
@@ -33,12 +34,31 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
         bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_video_video, BR.item_video_video,videos,listener){
             @Override
             public void onBindViewHolder(AppViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
                 ItemVideoVideoBinding itemVideoVideoBinding = (ItemVideoVideoBinding) holder.viewDataBinding;
-                if(videos.get(position).getId()!=-1){
-                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
+                itemVideoVideoBinding.getRoot().setTag(com.android.lib.R.id.data, this.list.get(position));
+                itemVideoVideoBinding.getRoot().setTag(com.android.lib.R.id.position, Integer.valueOf(position));
+                itemVideoVideoBinding.setVariable(this.vari, this.list.get(position));
+                itemVideoVideoBinding.executePendingBindings();
+                if(!videos.get(position).isNull()){
+                    itemVideoVideoBinding.getRoot().setOnClickListener(this);
+                    itemVideoVideoBinding.getRoot().setClickable(true);
                 }else{
-                    GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(R.color.black).into(itemVideoVideoBinding.ivVideo);
+                    itemVideoVideoBinding.getRoot().setClickable(false);
+                }
+                GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).load(videos.get(position).isNull()?R.color.white:videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
+                itemVideoVideoBinding.getRoot().setAlpha(1f);
+                switch (videos.get(position).getStatus()){
+                    case Record.本地无服务器有:
+                        itemVideoVideoBinding.getRoot().setAlpha(0.3f);
+                        break;
+                    case Record.本地有服务器无:
+
+                        break;
+                    case Record.本地有服务器有:
+
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -74,5 +94,9 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
                 }
             }
         });
+    }
+
+    public void updateTitle(Object o){
+        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
     }
 }

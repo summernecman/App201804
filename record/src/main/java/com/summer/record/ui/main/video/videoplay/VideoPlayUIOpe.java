@@ -6,14 +6,11 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.android.lib.GlideApp;
-import com.android.lib.base.interf.OnFinishListener;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.summer.record.R;
-import com.summer.record.data.video.Record;
+import com.summer.record.data.Record;
 import com.summer.record.databinding.FragMainVideoVideoplayBinding;
 
 import java.io.File;

@@ -7,8 +7,7 @@ import android.os.Bundle;
 import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.constant.ValueConstant;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.summer.record.data.video.Record;
+import com.summer.record.data.Record;
 
 public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
 
