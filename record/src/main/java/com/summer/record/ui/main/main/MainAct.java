@@ -45,6 +45,7 @@ public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAp
         FragManager2.getInstance().start(this,MainValue.文字,MainValue.文字ID,new TextFrag());
         FragManager2.getInstance().start(this,MainValue.设置,MainValue.设置ID,new SettFrag());
         startService(new Intent(this, ClipSevice.class));
+        getP().getU().showView(0);
     }
 
     @Override

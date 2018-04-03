@@ -5,6 +5,7 @@ package com.summer.record.ui.main.record;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.base.interf.OnFinishListener;
 import com.android.lib.base.interf.OnFinishWithObjI;
 import com.android.lib.base.ope.BaseDAOpe;
@@ -18,6 +19,7 @@ import com.android.lib.util.GsonUtil;
 import com.android.lib.util.data.DateFormatUtil;
 import com.summer.record.data.NetDataWork;
 import com.summer.record.data.Record;
+import com.summer.record.data.Records;
 import com.summer.record.tool.FileTool;
 
 import org.xutils.common.util.KeyValue;
@@ -42,6 +44,8 @@ public class RecordDAOpe extends BaseDAOpe {
     ArrayList<Record> records;
 
     private int index=0;
+
+    private Records recordsInfo;
 
     public void getVideos(final Context context, final OnFinishWithObjI i){
         new AsyncTask<String, String, ArrayList<Record>>() {
@@ -134,24 +138,28 @@ public class RecordDAOpe extends BaseDAOpe {
             }
             v.addAll(map.get(ss.get(i)));
         }
+        for(int i =0;i<v.size();i++){
+            v.get(i).setId(i);
+        }
         return v;
     }
 
 
 
-    public void updateRecords(Context context, ArrayList<Record> videos, NetI<BaseBean> adapter){
+    public void updateRecords(BaseUIFrag baseUIFrag, ArrayList<Record> videos, NetI<BaseBean> adapter){
         if(videos==null){
             return;
         }
         BaseReqBean baseReqBean = new BaseReqBean();
         baseReqBean.setData(GsonUtil.getInstance().toJson(videos));
-        NetDataWork.Data.updateRecords(context,baseReqBean,adapter);
+        NetDataWork.Data.updateRecords(baseUIFrag.getBaseUIAct(),baseReqBean,adapter);
     }
 
+    private int pagesize = 500;
 
-    public void updateRecordsStep(final Context context, final ArrayList<Record> videos, final OnFinishListener adapter){
-        final int start = getIndex()*500;
-        int end = getIndex()*500+500;
+    public void updateRecordsStep(final BaseUIFrag baseUIFrag, final ArrayList<Record> videos, final OnFinishListener adapter){
+        final int start = getIndex()*pagesize;
+        int end = getIndex()*pagesize+pagesize;
         if(start>=videos.size()){
             adapter.onFinish(null);
             return;
@@ -164,23 +172,18 @@ public class RecordDAOpe extends BaseDAOpe {
             list.add(videos.get(i));
         }
         final int finalEnd = end;
-        updateRecords(context, list, new UINetAdapter<BaseBean>(context) {
+        updateRecords(baseUIFrag, list, new UINetAdapter<BaseBean>(baseUIFrag,UINetAdapter.Loading) {
             @Override
             public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
                 super.onNetFinish(haveData, url, baseResBean);
                 adapter.onFinish(start+""+ finalEnd);
                 setIndex(getIndex()+1);
-                updateRecordsStep(context, videos, adapter);
+                updateRecordsStep(baseUIFrag, videos, adapter);
             }
         });
     }
 
 
-    public void getAllRecords(Context context,String atype, NetI<ArrayList<Record>> adapter){
-        Record record = new Record();
-        record.setAtype(atype);
-        NetDataWork.Data.getAllRecords(context,record,adapter);
-    }
 
 
     public void uploadRecord(Context context, Record record, NetI<BaseBean> adapter){
@@ -190,7 +193,6 @@ public class RecordDAOpe extends BaseDAOpe {
         List<KeyValue> list = new ArrayList<>();
         list.add(new KeyValue("file",new File(record.getLocpath())));
         list.add(new KeyValue("locpath",record.getLocpath()));
-
         NetDataWork.Data.uploadRecords(context,list,adapter);
     }
 
@@ -198,15 +200,29 @@ public class RecordDAOpe extends BaseDAOpe {
         if(list==null||list.size()<=getIndex()){
             return;
         }
-        Record record = list.get(getIndex());
-        uploadRecord(context,record,new NetAdapter<BaseBean>(context){
+        final Record record = list.get(getIndex());
+
+        NetDataWork.Data.isRecordUploaded(context, record, new UINetAdapter<Record>(context) {
             @Override
-            public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
-                setIndex(getIndex()+1);
-                listener.onFinish(getIndex());
-                uploadRecords(context, list, listener);
+            public void onResult(boolean success, String msg, Record o) {
+                super.onResult(success, msg, o);
+                if(!o.isUploaded()){
+                    uploadRecord(context,record,new NetAdapter<BaseBean>(context){
+                        @Override
+                        public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
+                            setIndex(getIndex()+1);
+                            listener.onFinish(record);
+                            uploadRecords(context, list, listener);
+                        }
+                    });
+                }else{
+                    setIndex(getIndex()+1);
+                    listener.onFinish(record);
+                    uploadRecords(context, list, listener);
+                }
             }
         });
+
     }
 
     public ArrayList<Record> getNoNullRecords(ArrayList<Record> list){
@@ -215,6 +231,9 @@ public class RecordDAOpe extends BaseDAOpe {
             if(list.get(i).getLocpath()!=null){
                 records.add(list.get(i));
             }
+        }
+        for(int i=0;i<records.size();i++){
+            records.get(i).setPos(i);
         }
         return records;
     }

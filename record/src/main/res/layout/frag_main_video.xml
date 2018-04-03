@@ -19,6 +19,8 @@
     layout="@layout/item_record_title"/>
 
         <android.support.v7.widget.RecyclerView
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:id="@+id/recycle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

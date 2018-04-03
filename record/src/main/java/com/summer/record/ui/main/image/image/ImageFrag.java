@@ -15,7 +15,9 @@ import com.android.lib.util.GsonUtil;
 import com.android.lib.util.LogUtil;
 import com.android.lib.util.fragment.two.FragManager2;
 import com.summer.record.R;
+import com.summer.record.data.NetDataWork;
 import com.summer.record.data.Record;
+import com.summer.record.data.Records;
 import com.summer.record.ui.main.image.imagedetail.ImageDetailFrag;
 import com.summer.record.ui.main.main.MainValue;
 import com.summer.record.ui.main.record.RecordDAOpe;
@@ -36,6 +38,16 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
                 getP().getU().loadImages(getP().getD().getRecords(),ImageFrag.this);
             }
         });
+
+
+        NetDataWork.Data.getRecordInfo(getBaseUIAct(), Record.ATYPE_IMAGE, new UINetAdapter<Records>(getBaseUIFrag()) {
+            @Override
+            public void onSuccess(Records o) {
+                super.onSuccess(o);
+                getP().getD().setRecordsInfo(o);
+                getP().getU().updateTitle(o.getDoneNum()+"/"+o.getAllNum());
+            }
+        });
     }
 
     @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
@@ -48,11 +60,11 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
             case R.id.tv_refresh:
                 ArrayList<Record>  list = getP().getD().getNoNullRecords(getP().getD().getRecords());
                 getP().getD().setIndex(0);
-                getP().getD().updateRecordsStep(getBaseAct(), list, new OnFinishListener() {
+                getP().getD().updateRecordsStep(getBaseUIFrag(), list, new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
                         if(o==null){
-                            getP().getD().getAllRecords(getBaseAct(), Record.ATYPE_IMAGE,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag()) {
+                            NetDataWork.Data.getAllRecords(getBaseAct(), Record.ATYPE_IMAGE,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag(),UINetAdapter.Loading) {
                                 @Override
                                 public void onSuccess(ArrayList<Record> o) {
                                     super.onSuccess(o);
@@ -80,7 +92,11 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
                 getP().getD().uploadRecords(getBaseUIAct(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
-                        LogUtil.E(o);
+                        Record record = (Record) o;
+                        getP().getU().scrollToPos(getP().getD().getRecords(), record);
+                        if(getP().getD().getRecordsInfo()!=null){
+                            getP().getU().updateTitle(record.getPos()+"/"+getP().getD().getRecordsInfo().getAllNum());
+                        }
                     }
                 });
                 break;

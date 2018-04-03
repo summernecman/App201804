@@ -7,5 +7,5 @@ public class RecordDataBase {
     //数据库名称
     public static final String NAME = "RecordDataBase";
     //数据库版本
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 }

@@ -15,10 +15,15 @@ import com.android.lib.util.GsonUtil;
 import com.android.lib.util.LogUtil;
 import com.android.lib.util.fragment.two.FragManager2;
 import com.summer.record.R;
+import com.summer.record.data.NetDataWork;
 import com.summer.record.data.Record;
+import com.summer.record.data.Records;
 import com.summer.record.ui.main.main.MainValue;
 import com.summer.record.ui.main.record.RecordDAOpe;
 import com.summer.record.ui.main.video.videoplay.VideoPlayFrag;
+
+import org.xutils.http.RequestParams;
+import org.xutils.http.body.MultipartBody;
 
 import java.util.ArrayList;
 
@@ -36,6 +41,16 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
                 getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
             }
         });
+
+        NetDataWork.Data.getRecordInfo(getBaseUIAct(), Record.ATYPE_VIDEO, new UINetAdapter<Records>(getBaseUIFrag()) {
+            @Override
+            public void onSuccess(Records o) {
+                super.onSuccess(o);
+                getP().getD().setRecordsInfo(o);
+                getP().getU().updateTitle(o.getDoneNum()+"/"+o.getAllNum());
+            }
+        });
+
     }
 
     @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
@@ -46,13 +61,13 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
 
                 break;
             case R.id.tv_refresh:
-                getP().getD().updateRecords(getBaseAct(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new UINetAdapter<BaseBean>(getBaseUIFrag()) {
+                getP().getD().updateRecords(getBaseUIFrag(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new UINetAdapter<BaseBean>(getBaseUIFrag(),UINetAdapter.Loading) {
                     @Override
                     public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
                         super.onNetFinish(haveData, url, baseResBean);
                         LogUtil.E(GsonUtil.getInstance().toJson(baseResBean));
 
-                        getP().getD().getAllRecords(getBaseAct(),Record.ATYPE_VIDEO, new UINetAdapter<ArrayList<Record>>(getBaseUIFrag()) {
+                        NetDataWork.Data.getAllRecords(getBaseAct(),Record.ATYPE_VIDEO, new UINetAdapter<ArrayList<Record>>(getBaseUIFrag()) {
                             @Override
                             public void onSuccess(ArrayList<Record> o) {
                                 super.onSuccess(o);
@@ -76,10 +91,15 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
                     getP().getD().setIndex(getP().getD().getNoNullRecords(getP().getD().getRecords()).size());
                     return;
                 }
-                getP().getD().uploadRecords(getBaseUIAct(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new OnFinishListener() {
+
+                getP().getD().uploadRecords(getBaseUIAct(),getP().getD().getNoNullRecords(getP().getD().getRecords()) , new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
-                        LogUtil.E(o);
+                        Record record = (Record) o;
+                        getP().getU().scrollToPos(getP().getD().getRecords(), record);
+                        if(getP().getD().getRecordsInfo()!=null){
+                            getP().getU().updateTitle(record.getPos()+"/"+getP().getD().getRecordsInfo().getAllNum());
+                        }
                     }
                 });
                 break;

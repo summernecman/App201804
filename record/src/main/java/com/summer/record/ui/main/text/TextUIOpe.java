@@ -14,8 +14,10 @@ import android.view.View;
 import com.android.lib.base.adapter.AppsDataBindingAdapter;
 import com.android.lib.base.ope.BaseUIOpe;
 import com.android.lib.util.ScreenUtil;
+import com.android.lib.util.StringUtil;
 import com.summer.record.BR;
 import com.summer.record.R;
+import com.summer.record.data.Record;
 import com.summer.record.data.text.Text;
 import com.summer.record.databinding.FragMainTextBinding;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 
 public class TextUIOpe extends BaseUIOpe<FragMainTextBinding> {
 
-    public void initTexts(ArrayList<Text> texts){
+    public void initTexts(ArrayList<Record> texts){
         bind.recycle.setLayoutManager(new LinearLayoutManager(context));
         bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_text_text, BR.item_text_text,texts));
         final Paint paint = new Paint();
@@ -48,4 +50,7 @@ public class TextUIOpe extends BaseUIOpe<FragMainTextBinding> {
         });
     }
 
+    public void updateTitle(Object o){
+        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
+    }
 }

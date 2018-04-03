@@ -14,6 +14,7 @@ import com.android.lib.service.main.AppService;
 import com.android.lib.util.LogUtil;
 import com.android.lib.view.bottommenu.MessageEvent;
 import com.google.android.exoplayer2.metadata.emsg.EventMessage;
+import com.summer.record.data.Record;
 import com.summer.record.data.text.Text;
 import com.summer.record.ui.main.text.TextFrag;
 
@@ -31,12 +32,12 @@ public class ClipSevice extends Service {
                 for(int i=0;i<clipboarmanager.getPrimaryClip().getItemCount();i++){
                     ClipData.Item item = clipboarmanager.getPrimaryClip().getItemAt(i);
                     LogUtil.E( i+"ClipData"+item.getText());
-                    Text textDB = new Text();
-                    textDB.text = item.getText().toString();
-                    textDB.time = System.currentTimeMillis();
-                    textDB.save();
+                    Record record = new Record();
+                    record.atype = Record.ATYPE_TEXT;
+                    record.content = item.getText().toString();
+                    record.ctime = System.currentTimeMillis();
+                    record.save();
                 }
-                LogUtil.E("ClipSevice");
                 EventBus.getDefault().post(new MessageEvent(ClipSevice.class.getName(), TextFrag.class.getName(),""));
             }
         });

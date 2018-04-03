@@ -6,6 +6,7 @@ import com.android.lib.aplication.LibAplication;
 import com.android.lib.network.bean.res.BaseResBean;
 import com.android.lib.network.news.NetAdapter;
 import com.android.lib.network.news.NetGet;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.xutils.common.Callback;
 

@@ -6,6 +6,7 @@ import com.android.lib.bean.BaseBean;
 import com.android.lib.util.NullUtil;
 import com.android.lib.util.data.DateFormatUtil;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.summer.record.data.db.RecordDataBase;
 
@@ -21,29 +22,33 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@Table(database = RecordDataBase.class)
+@Table(database = RecordDataBase.class)
 public class Record extends BaseBean{
 
+    @PrimaryKey(autoincrement = true)
     public Integer id;
 
+    public Integer pos;
+
+    @Column
     public String locpath;
-
+    @Column
     public String netpath;
-
+    @Column
     public Long ctime;
-
+    @Column
     public Long utime;
-
+    @Column
     public String atype;
-
+    @Column
     public String btype;
-
+    @Column
     public String address;
-
+    @Column
     public Long duration;
-
+    @Column
     public String name;
-
+    @Column
     public String content;
 
     public Uri uri;
@@ -51,6 +56,8 @@ public class Record extends BaseBean{
     public String dateStr;
 
     public boolean frist = false;
+
+    public boolean isUploaded = false;
 
     public static final int 本地有服务器无=1;
 
@@ -66,7 +73,11 @@ public class Record extends BaseBean{
 
     public static final String ATYPE_IMAGE = "image";
 
-    public static final String ATYPE_TEXT = "video";
+    public static final String ATYPE_TEXT = "text";
+
+
+
+    public boolean isDoing = false;
 
     public Record() {
     }

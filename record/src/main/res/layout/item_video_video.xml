@@ -11,11 +11,37 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="90dp">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white"
+        android:layout_margin="2dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <ImageView
-    android:layout_margin="2dp"
+    android:background="@color/white"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_margin="1dp"
     android:id="@+id/iv_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
+        <ImageView
+            android:id="@+id/iv_upload"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/icon_record_upload_y"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
