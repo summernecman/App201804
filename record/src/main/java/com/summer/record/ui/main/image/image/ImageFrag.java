@@ -60,22 +60,36 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
             case R.id.tv_refresh:
                 ArrayList<Record>  list = getP().getD().getNoNullRecords(getP().getD().getRecords());
                 getP().getD().setIndex(0);
-                getP().getD().updateRecordsStep(getBaseUIFrag(), list, new OnFinishListener() {
+                final ArrayList<Record> records = new ArrayList<>();
+                getP().getD().updateRecordsStep(records,getBaseUIFrag(), list, new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
-                        if(o==null){
-                            NetDataWork.Data.getAllRecords(getBaseAct(), Record.ATYPE_IMAGE,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag(),UINetAdapter.Loading) {
+                        if(!(o instanceof String)){
+                            getP().getD().uploadRecords(getBaseUIAct(),records , new OnFinishListener() {
                                 @Override
-                                public void onSuccess(ArrayList<Record> o) {
-                                    super.onSuccess(o);
-                                    getP().getD().setRecords(getP().getD().dealRecord(o));
-                                    getP().getU().loadImages(getP().getD().getRecords(),ImageFrag.this);
-                                }
+                                public void onFinish(Object o) {
+                                    if(o==null){
+                                        NetDataWork.Data.getAllRecords(getBaseAct(), Record.ATYPE_IMAGE,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag(),UINetAdapter.Loading) {
+                                            @Override
+                                            public void onSuccess(ArrayList<Record> o) {
+                                                super.onSuccess(o);
+                                                getP().getD().setRecords(getP().getD().dealRecord(o));
+                                                getP().getU().loadImages(getP().getD().getRecords(),ImageFrag.this);
+                                            }
 
-                                @Override
-                                public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
-                                    super.onNetFinish(haveData, url, baseResBean);
-                                    getP().getU().updateTitle(baseResBean.getOther());
+                                            @Override
+                                            public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
+                                                super.onNetFinish(haveData, url, baseResBean);
+                                                getP().getU().updateTitle(baseResBean.getOther());
+                                            }
+                                        });
+                                    }else{
+                                        Record record = (Record) o;
+//                                    getP().getU().scrollToPos(getP().getD().getRecords(), record);
+                                        if(getP().getD().getRecordsInfo()!=null){
+                                            getP().getU().updateTitle(record.getPos()+"/"+getP().getD().getRecordsInfo().getAllNum());
+                                        }
+                                    }
                                 }
                             });
                         }

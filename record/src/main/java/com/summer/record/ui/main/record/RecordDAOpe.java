@@ -17,6 +17,7 @@ import com.android.lib.network.news.NetI;
 import com.android.lib.network.news.UINetAdapter;
 import com.android.lib.util.GsonUtil;
 import com.android.lib.util.data.DateFormatUtil;
+import com.google.gson.reflect.TypeToken;
 import com.summer.record.data.NetDataWork;
 import com.summer.record.data.Record;
 import com.summer.record.data.Records;
@@ -146,7 +147,7 @@ public class RecordDAOpe extends BaseDAOpe {
 
 
 
-    public void updateRecords(BaseUIFrag baseUIFrag, ArrayList<Record> videos, NetI<BaseBean> adapter){
+    public void updateRecords(BaseUIFrag baseUIFrag, ArrayList<Record> videos, NetI<ArrayList<Record>> adapter){
         if(videos==null){
             return;
         }
@@ -155,13 +156,13 @@ public class RecordDAOpe extends BaseDAOpe {
         NetDataWork.Data.updateRecords(baseUIFrag.getBaseUIAct(),baseReqBean,adapter);
     }
 
-    private int pagesize = 500;
+    private int pagesize = 100;
 
-    public void updateRecordsStep(final BaseUIFrag baseUIFrag, final ArrayList<Record> videos, final OnFinishListener adapter){
+    public void updateRecordsStep(final ArrayList<Record> records, final BaseUIFrag baseUIFrag, final ArrayList<Record> videos, final OnFinishListener adapter){
         final int start = getIndex()*pagesize;
         int end = getIndex()*pagesize+pagesize;
         if(start>=videos.size()){
-            adapter.onFinish(null);
+            adapter.onFinish(records);
             return;
         }
         if(end>=videos.size()){
@@ -172,13 +173,18 @@ public class RecordDAOpe extends BaseDAOpe {
             list.add(videos.get(i));
         }
         final int finalEnd = end;
-        updateRecords(baseUIFrag, list, new UINetAdapter<BaseBean>(baseUIFrag,UINetAdapter.Loading) {
+
+        updateRecords(baseUIFrag, list, new UINetAdapter<ArrayList<Record>>(baseUIFrag,UINetAdapter.Loading) {
             @Override
             public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
                 super.onNetFinish(haveData, url, baseResBean);
                 adapter.onFinish(start+""+ finalEnd);
                 setIndex(getIndex()+1);
-                updateRecordsStep(baseUIFrag, videos, adapter);
+                ArrayList<Record> list1 = GsonUtil.getInstance().fromJson(GsonUtil.getInstance().toJson(baseResBean.getData()),new TypeToken<ArrayList<Record>>(){}.getType());
+                if(list1!=null&&list1.size()!=0){
+                    records.addAll(list1);
+                }
+                updateRecordsStep(records,baseUIFrag, videos, adapter);
             }
         });
     }
@@ -198,6 +204,7 @@ public class RecordDAOpe extends BaseDAOpe {
 
     public void uploadRecords(final Context context, final ArrayList<Record> list, final OnFinishListener listener){
         if(list==null||list.size()<=getIndex()){
+            listener.onFinish(null);
             return;
         }
         final Record record = list.get(getIndex());

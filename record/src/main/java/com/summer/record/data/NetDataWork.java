@@ -19,7 +19,7 @@ public class NetDataWork {
 
     public static class Data{
 
-        public static void updateRecords(Context context, BaseBean baseBean, NetI<BaseBean> adapter){
+        public static void updateRecords(Context context, BaseBean baseBean, NetI<ArrayList<Record>> adapter){
             NetGet.postData(context,RecordURL.获取地址("/record/updateRecords"),baseBean,adapter);
         }
 

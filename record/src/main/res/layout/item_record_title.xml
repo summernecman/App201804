@@ -60,6 +60,7 @@
 
 
         <ImageView
+            android:visibility="gone"
             android:layout_marginRight="15dp"
             android:src="@drawable/drawable_record_upload"
             android:id="@+id/tv_upload"

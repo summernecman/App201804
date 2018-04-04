@@ -66,10 +66,11 @@ public class TextFrag extends BaseUIFrag<TextUIOpe,RecordDAOpe>{
                 getP().getD().setIndex(0);
                 getP().getD().setPagesize(10);
                 ArrayList<Record> list = (ArrayList<Record>) new Select().from(Record.class).queryList();
-                getP().getD().updateRecordsStep(getBaseUIFrag(), list, new OnFinishListener() {
+                final ArrayList<Record> records = new ArrayList<>();
+                getP().getD().updateRecordsStep(records,getBaseUIFrag(), list, new OnFinishListener() {
                     @Override
                     public void onFinish(Object o) {
-                        if(o==null){
+                        if(!(o instanceof String)){
                             NetDataWork.Data.getAllRecords(getBaseAct(), Record.ATYPE_TEXT,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag(),UINetAdapter.Loading) {
                                 @Override
                                 public void onSuccess(ArrayList<Record> o) {

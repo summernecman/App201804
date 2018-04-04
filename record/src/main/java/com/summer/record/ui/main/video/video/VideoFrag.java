@@ -18,6 +18,7 @@ import com.summer.record.R;
 import com.summer.record.data.NetDataWork;
 import com.summer.record.data.Record;
 import com.summer.record.data.Records;
+import com.summer.record.ui.main.image.image.ImageFrag;
 import com.summer.record.ui.main.main.MainValue;
 import com.summer.record.ui.main.record.RecordDAOpe;
 import com.summer.record.ui.main.video.videoplay.VideoPlayFrag;
@@ -61,26 +62,41 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
 
                 break;
             case R.id.tv_refresh:
-                getP().getD().updateRecords(getBaseUIFrag(), getP().getD().getNoNullRecords(getP().getD().getRecords()), new UINetAdapter<BaseBean>(getBaseUIFrag(),UINetAdapter.Loading) {
+                ArrayList<Record>  list = getP().getD().getNoNullRecords(getP().getD().getRecords());
+                getP().getD().setIndex(0);
+                final ArrayList<Record> records = new ArrayList<>();
+                getP().getD().updateRecordsStep(records,getBaseUIFrag(), list, new OnFinishListener() {
                     @Override
-                    public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
-                        super.onNetFinish(haveData, url, baseResBean);
-                        LogUtil.E(GsonUtil.getInstance().toJson(baseResBean));
+                    public void onFinish(Object o) {
+                        if(!(o instanceof String)){
+                            getP().getD().uploadRecords(getBaseUIAct(),records , new OnFinishListener() {
+                                @Override
+                                public void onFinish(Object o) {
+                                    if(o==null){
+                                        NetDataWork.Data.getAllRecords(getBaseAct(), Record.ATYPE_VIDEO,new UINetAdapter<ArrayList<Record>>(getBaseUIFrag(),UINetAdapter.Loading) {
+                                            @Override
+                                            public void onSuccess(ArrayList<Record> o) {
+                                                super.onSuccess(o);
+                                                getP().getD().setRecords(getP().getD().dealRecord(o));
+                                                getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
+                                            }
 
-                        NetDataWork.Data.getAllRecords(getBaseAct(),Record.ATYPE_VIDEO, new UINetAdapter<ArrayList<Record>>(getBaseUIFrag()) {
-                            @Override
-                            public void onSuccess(ArrayList<Record> o) {
-                                super.onSuccess(o);
-                                getP().getD().setRecords(getP().getD().dealRecord(o));
-                                getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
-                            }
-
-                            @Override
-                            public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
-                                super.onNetFinish(haveData, url, baseResBean);
-                                getP().getU().updateTitle(baseResBean.getOther());
-                            }
-                        });
+                                            @Override
+                                            public void onNetFinish(boolean haveData, String url, BaseResBean baseResBean) {
+                                                super.onNetFinish(haveData, url, baseResBean);
+                                                getP().getU().updateTitle(baseResBean.getOther());
+                                            }
+                                        });
+                                    }else{
+                                        Record record = (Record) o;
+                                        getP().getU().scrollToPos(getP().getD().getRecords(), record);
+                                        if(getP().getD().getRecordsInfo()!=null){
+                                            getP().getU().updateTitle(record.getPos()+"/"+getP().getD().getRecordsInfo().getAllNum());
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
                 break;
