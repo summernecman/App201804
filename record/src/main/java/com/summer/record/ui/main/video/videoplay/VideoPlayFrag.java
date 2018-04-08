@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.constant.ValueConstant;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.summer.record.R;
 import com.summer.record.data.Record;
 
 public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
@@ -20,8 +21,8 @@ public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
     }
 
     @Override
-    public void initNow() {
-        super.initNow();
+    public void initdelay() {
+        super.initdelay();
         getP().getU().play((Record) getArguments().getSerializable(ValueConstant.DATA_DATA));
     }
 
@@ -41,5 +42,15 @@ public class VideoPlayFrag extends BaseUIFrag<VideoPlayUIOpe,VideoPlayDAOpe> {
     public void onDestroy() {
         super.onDestroy();
         GSYVideoManager.releaseAllVideos();
+    }
+
+    @Override
+    public int getBaseUILayout() {
+        return R.layout.frag_base;
+    }
+
+    @Override
+    protected int delayTime() {
+        return 220;
     }
 }

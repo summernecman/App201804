@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.lib.GlideApp;
 import com.android.lib.base.adapter.AppsDataBindingAdapter;
@@ -22,6 +23,7 @@ import com.android.lib.util.StringUtil;
 import com.summer.record.BR;
 import com.summer.record.R;
 import com.summer.record.data.Record;
+import com.summer.record.databinding.FragBaseBinding;
 import com.summer.record.databinding.FragMainImageBinding;
 import com.summer.record.databinding.ItemImageImageBinding;
 import com.summer.record.databinding.ItemVideoVideoBinding;
@@ -35,8 +37,8 @@ public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
 
     public void loadImages(final ArrayList<Record> images, ViewListener listener){
 
-        bind.recycle.setLayoutManager(new GridLayoutManager(context,4));
-        bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_image_image, BR.item_image_image,images,listener){
+        getBind().recycle.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        getBind().recycle.setAdapter(new AppsDataBindingAdapter(getActivity(), R.layout.item_image_image, BR.item_image_image,images,listener){
             @Override
             public void onBindViewHolder(@NonNull AppViewHolder holder, int position, @NonNull List<Object> payloads) {
                 super.onBindViewHolder(holder, position, payloads);
@@ -93,21 +95,22 @@ public class ImageUIOpe extends BaseUIOpe<FragMainImageBinding> {
                 }
             }
         });
-        bind.recycle.addItemDecoration(new VideoItemDecoration(images));
+        getBind().recycle.addItemDecoration(new VideoItemDecoration(images));
     }
 
     public void updateTitle(Object o){
-        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
+        TextView textView = getView().findViewById(R.id.tv_lab);
+        textView.setText(StringUtil.getStr(o));
     }
 
     public void scrollToPos(ArrayList<Record> records,Record record){
         LogUtil.E(record.getId());
-        GridLayoutManager gridLayoutManager = (GridLayoutManager) bind.recycle.getLayoutManager();
+        GridLayoutManager gridLayoutManager = (GridLayoutManager) getBind().recycle.getLayoutManager();
         gridLayoutManager.scrollToPositionWithOffset(record.getId(),0);
         for(int i=0;i<records.size();i++){
             record.setDoing(false);
         }
         records.get(record.getId()).setDoing(true);
-        bind.recycle.getAdapter().notifyItemChanged(record.getId(),record);
+        getBind().recycle.getAdapter().notifyItemChanged(record.getId(),record);
     }
 }

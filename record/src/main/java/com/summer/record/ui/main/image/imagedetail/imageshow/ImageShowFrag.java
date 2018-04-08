@@ -20,8 +20,8 @@ public class ImageShowFrag extends BaseUIFrag<ImageShowUIOpe,ImageShowDAOpe> {
     }
 
     @Override
-    public void initNow() {
-        super.initNow();
+    public void initdelay() {
+        super.initdelay();
         getP().getU().showImage((Record) getArguments().getSerializable(ValueConstant.DATA_DATA));
     }
 }

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.lib.GlideApp;
 import com.android.lib.base.adapter.AppsDataBindingAdapter;
@@ -33,8 +34,8 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
 
     public void loadVideos(final ArrayList<Record> videos, ViewListener listener){
 
-        bind.recycle.setLayoutManager(new GridLayoutManager(context,4));
-        bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_video_video, BR.item_video_video,videos,listener){
+        getBind().recycle.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        getBind().recycle.setAdapter(new AppsDataBindingAdapter(getActivity(), R.layout.item_video_video, BR.item_video_video,videos,listener){
 
             @Override
             public void onBindViewHolder(@NonNull AppViewHolder holder, int position, @NonNull List<Object> payloads) {
@@ -92,21 +93,22 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
                 }
             }
         });
-        bind.recycle.addItemDecoration(new VideoItemDecoration(videos));
+        getBind().recycle.addItemDecoration(new VideoItemDecoration(videos));
     }
 
     public void updateTitle(Object o){
-        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
+        TextView textView = getView().findViewById(R.id.tv_lab);
+        textView.setText(StringUtil.getStr(o));
     }
 
     public void scrollToPos(ArrayList<Record> records,Record record){
         LogUtil.E(record.getId());
-        GridLayoutManager gridLayoutManager = (GridLayoutManager) bind.recycle.getLayoutManager();
+        GridLayoutManager gridLayoutManager = (GridLayoutManager) getBind().recycle.getLayoutManager();
         gridLayoutManager.scrollToPositionWithOffset(record.getId(),0);
         for(int i=0;i<records.size();i++){
             record.setDoing(false);
         }
         records.get(record.getId()).setDoing(true);
-        bind.recycle.getAdapter().notifyItemChanged(record.getId(),record);
+        getBind().recycle.getAdapter().notifyItemChanged(record.getId(),record);
     }
 }

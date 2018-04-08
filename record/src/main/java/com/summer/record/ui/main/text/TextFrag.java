@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class TextFrag extends BaseUIFrag<TextUIOpe,RecordDAOpe>{
 
@@ -55,6 +56,7 @@ public class TextFrag extends BaseUIFrag<TextUIOpe,RecordDAOpe>{
     }
 
 
+    @Optional
     @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
     public void onClick(View v) {
         super.onClick(v);
@@ -92,6 +94,11 @@ public class TextFrag extends BaseUIFrag<TextUIOpe,RecordDAOpe>{
 
                 break;
         }
+    }
+
+    @Override
+    public int getBaseUILayout() {
+        return R.layout.frag_base;
     }
 
 }

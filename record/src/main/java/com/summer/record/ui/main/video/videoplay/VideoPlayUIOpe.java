@@ -18,20 +18,20 @@ import java.io.File;
 public class VideoPlayUIOpe extends BaseUIOpe<FragMainVideoVideoplayBinding> {
 
     public void play(Record video) {
-        bind.videoplayer.setUp(video.getLocpath(), false, new File(""), "视频播放");
+        getBind().videoplayer.setUp(video.getLocpath(), false, new File(""), "视频播放");
         //外部辅助的旋转，帮助全屏
-        final OrientationUtils orientationUtils = new OrientationUtils((Activity) context, bind.videoplayer);
+        final OrientationUtils orientationUtils = new OrientationUtils((Activity) getActivity(), getBind().videoplayer);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
-        bind.videoplayer.setIsTouchWiget(true);
-        bind.videoplayer.setIsTouchWigetFull(false);
-        bind.videoplayer.getBackButton().setVisibility(View.GONE);
-        bind.videoplayer.getTitleTextView().setVisibility(View.GONE);
+        getBind().videoplayer.setIsTouchWiget(true);
+        getBind().videoplayer.setIsTouchWigetFull(false);
+        getBind().videoplayer.getBackButton().setVisibility(View.GONE);
+        getBind().videoplayer.getTitleTextView().setVisibility(View.GONE);
 
-        ImageView imageView = new ImageView(context);
+        ImageView imageView = new ImageView(getActivity());
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        bind.videoplayer.setThumbImageView(imageView);
-        Glide.with(context).setDefaultRequestOptions(
+        getBind().videoplayer.setThumbImageView(imageView);
+        Glide.with(getActivity()).setDefaultRequestOptions(
                 new RequestOptions()
                         .frame(3000000)
                         .centerCrop())
@@ -39,21 +39,21 @@ public class VideoPlayUIOpe extends BaseUIOpe<FragMainVideoVideoplayBinding> {
                 .into(imageView);
 
         //关闭自动旋转
-        bind.videoplayer.setRotateViewAuto(false);
-        bind.videoplayer.setLockLand(true);
-        bind.videoplayer.setShowFullAnimation(true);
-        bind.videoplayer.setNeedLockFull(true);
-        bind.videoplayer.setSeekRatio(1);
-        bind.videoplayer.setRotateWithSystem(true);
+        getBind().videoplayer.setRotateViewAuto(false);
+        getBind().videoplayer.setLockLand(true);
+        getBind().videoplayer.setShowFullAnimation(true);
+        getBind().videoplayer.setNeedLockFull(true);
+        getBind().videoplayer.setSeekRatio(1);
+        getBind().videoplayer.setRotateWithSystem(true);
         //detailPlayer.setOpenPreView(false);
-        bind.videoplayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        getBind().videoplayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
                 orientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                bind.videoplayer.startWindowFullscreen(context, true, true);
+                getBind().videoplayer.startWindowFullscreen(getActivity(), true, true);
             }
         });
         //bind.videoplayer.setUp(videoBean.getFile(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, videoBean.getCreated());

@@ -71,4 +71,9 @@ public class MainAct extends BaseUIActivity<MainUIOpe,MainDAOpe> implements OnAp
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FragManager2.getInstance().clear();
+    }
 }

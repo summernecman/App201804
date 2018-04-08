@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.android.lib.base.fragment.BaseUIFrag;
 import com.android.lib.constant.ValueConstant;
 import com.android.lib.util.LogUtil;
+import com.summer.record.R;
 import com.summer.record.data.Record;
 
 import java.util.ArrayList;
@@ -27,8 +28,13 @@ public class ImageDetailFrag extends BaseUIFrag<ImageDetailUIOpe,ImageDetailDAOp
     }
 
     @Override
-    public void initNow() {
-        super.initNow();
+    public void initdelay() {
+        super.initdelay();
         getP().getU().initImages(getP().getD().getImages(),getArguments().getInt(ValueConstant.DATA_INDEX));
+    }
+
+    @Override
+    public int getBaseUILayout() {
+        return R.layout.frag_base;
     }
 }

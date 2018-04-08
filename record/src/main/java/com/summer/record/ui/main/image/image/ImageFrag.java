@@ -25,6 +25,7 @@ import com.summer.record.ui.main.record.RecordDAOpe;
 import java.util.ArrayList;
 
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements ViewListener{
 
@@ -49,7 +50,7 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
             }
         });
     }
-
+    @Optional
     @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
     public void onClick(View v) {
         super.onClick(v);
@@ -65,6 +66,7 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
                     @Override
                     public void onFinish(Object o) {
                         if(!(o instanceof String)){
+                            getP().getD().setIndex(0);
                             getP().getD().uploadRecords(getBaseUIAct(),records , new OnFinishListener() {
                                 @Override
                                 public void onFinish(Object o) {
@@ -126,4 +128,11 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
                 break;
         }
     }
+
+    @Override
+    public int getBaseUILayout() {
+        return R.layout.frag_base;
+    }
+
+
 }

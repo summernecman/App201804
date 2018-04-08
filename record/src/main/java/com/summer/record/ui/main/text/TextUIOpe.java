@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.lib.base.adapter.AppsDataBindingAdapter;
 import com.android.lib.base.ope.BaseUIOpe;
@@ -26,13 +27,13 @@ import java.util.ArrayList;
 public class TextUIOpe extends BaseUIOpe<FragMainTextBinding> {
 
     public void initTexts(ArrayList<Record> texts){
-        bind.recycle.setLayoutManager(new LinearLayoutManager(context));
-        bind.recycle.setAdapter(new AppsDataBindingAdapter(context, R.layout.item_text_text, BR.item_text_text,texts));
+        getBind().recycle.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getBind().recycle.setAdapter(new AppsDataBindingAdapter(getActivity(), R.layout.item_text_text, BR.item_text_text,texts));
         final Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.GRAY);
         paint.setStrokeWidth(ScreenUtil.最小DIMEN);
-        bind.recycle.addItemDecoration(new RecyclerView.ItemDecoration() {
+        getBind().recycle.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
                 super.onDrawOver(c, parent, state);
@@ -51,6 +52,7 @@ public class TextUIOpe extends BaseUIOpe<FragMainTextBinding> {
     }
 
     public void updateTitle(Object o){
-        bind.recordtitle.tvLab.setText(StringUtil.getStr(o));
+        TextView textView = getView().findViewById(R.id.tv_lab);
+        textView.setText(StringUtil.getStr(o));
     }
 }

@@ -29,6 +29,7 @@ import org.xutils.http.body.MultipartBody;
 import java.util.ArrayList;
 
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements ViewListener{
 
@@ -53,13 +54,13 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
         });
 
     }
-
+    @Optional
     @OnClick({R.id.iv_add,R.id.tv_refresh,R.id.tv_upload})
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()){
             case R.id.iv_add:
-
+                getP().getD().dddd();
                 break;
             case R.id.tv_refresh:
                 ArrayList<Record>  list = getP().getD().getNoNullRecords(getP().getD().getRecords());
@@ -69,6 +70,7 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
                     @Override
                     public void onFinish(Object o) {
                         if(!(o instanceof String)){
+                            getP().getD().setIndex(0);
                             getP().getD().uploadRecords(getBaseUIAct(),records , new OnFinishListener() {
                                 @Override
                                 public void onFinish(Object o) {
@@ -129,5 +131,10 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
                 FragManager2.getInstance().start(getBaseUIAct(), MainValue.视频, VideoPlayFrag.getInstance((Record) view.getTag(R.id.data)));
                 break;
         }
+    }
+
+    @Override
+    public int getBaseUILayout() {
+        return R.layout.frag_base;
     }
 }

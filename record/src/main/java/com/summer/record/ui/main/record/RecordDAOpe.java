@@ -16,6 +16,7 @@ import com.android.lib.network.news.NetAdapter;
 import com.android.lib.network.news.NetI;
 import com.android.lib.network.news.UINetAdapter;
 import com.android.lib.util.GsonUtil;
+import com.android.lib.util.LogUtil;
 import com.android.lib.util.data.DateFormatUtil;
 import com.google.gson.reflect.TypeToken;
 import com.summer.record.data.NetDataWork;
@@ -47,6 +48,21 @@ public class RecordDAOpe extends BaseDAOpe {
     private int index=0;
 
     private Records recordsInfo;
+
+    BDAOpe bdaOpe;
+
+    public RecordDAOpe(){
+        LogUtil.E("RecordDAOpe");
+    }
+
+
+    public void dddd(){
+        if(bdaOpe==null){
+            bdaOpe = new BDAOpe();
+        }
+        bdaOpe.dddd();
+    }
+
 
     public void getVideos(final Context context, final OnFinishWithObjI i){
         new AsyncTask<String, String, ArrayList<Record>>() {
