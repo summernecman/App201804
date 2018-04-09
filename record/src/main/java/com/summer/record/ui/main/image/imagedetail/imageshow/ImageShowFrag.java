@@ -24,4 +24,9 @@ public class ImageShowFrag extends BaseUIFrag<ImageShowUIOpe,ImageShowDAOpe> {
         super.initdelay();
         getP().getU().showImage((Record) getArguments().getSerializable(ValueConstant.DATA_DATA));
     }
+
+    @Override
+    protected int delayTime() {
+        return 0;
+    }
 }

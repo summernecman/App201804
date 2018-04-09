@@ -32,11 +32,13 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
     @Override
     public void initdelay() {
         super.initdelay();
+        startLoading();
         getP().getD().getImages(getBaseAct(), new OnFinishWithObjI() {
             @Override
             public void onNetFinish(Object o) {
                 getP().getD().setRecords((ArrayList<Record>) o);
                 getP().getU().loadImages(getP().getD().getRecords(),ImageFrag.this);
+                stopLoading();
             }
         });
 
@@ -124,7 +126,11 @@ public class ImageFrag  extends BaseUIFrag<ImageUIOpe,RecordDAOpe> implements Vi
     public void onInterupt(int i, View view) {
         switch (i){
             case ViewListener.TYPE_ONCLICK:
-                FragManager2.getInstance().start(getBaseUIAct(), MainValue.图片,ImageDetailFrag.getInstance(getP().getD().getRecords(), (Integer) view.getTag(R.id.position)));
+                Record record = (Record) view.getTag(R.id.data);
+                if(record.getLocpath()==null){
+                    return;
+                }
+                FragManager2.getInstance().start(getBaseUIAct(), MainValue.图片,ImageDetailFrag.getInstance(getP().getD().getNoNullRecords(getP().getD().getRecords()),record.getPos() ));
                 break;
         }
     }

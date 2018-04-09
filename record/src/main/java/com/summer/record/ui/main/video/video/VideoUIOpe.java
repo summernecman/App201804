@@ -20,6 +20,8 @@ import com.android.lib.bean.AppViewHolder;
 import com.android.lib.util.LogUtil;
 import com.android.lib.util.ScreenUtil;
 import com.android.lib.util.StringUtil;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.summer.record.BR;
 import com.summer.record.R;
 import com.summer.record.data.Record;
@@ -33,6 +35,9 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
 
 
     public void loadVideos(final ArrayList<Record> videos, ViewListener listener){
+
+        final RequestOptions requestOptions = new RequestOptions();
+        requestOptions.encodeQuality(5).centerCrop().placeholder(Color.WHITE).skipMemoryCache(false).override(200,200);
 
         getBind().recycle.setLayoutManager(new GridLayoutManager(getActivity(),4));
         getBind().recycle.setAdapter(new AppsDataBindingAdapter(getActivity(), R.layout.item_video_video, BR.item_video_video,videos,listener){
@@ -60,7 +65,7 @@ public class VideoUIOpe extends BaseUIOpe<FragMainVideoBinding> {
                 itemVideoVideoBinding.getRoot().setTag(com.android.lib.R.id.position, Integer.valueOf(position));
                 itemVideoVideoBinding.setVariable(this.vari, this.list.get(position));
                 itemVideoVideoBinding.executePendingBindings();
-                GlideApp.with(context).asBitmap().centerCrop().thumbnail(0.1f).placeholder(Color.WHITE).load(videos.get(position).isNull()?R.color.white:videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
+                GlideApp.with(context).asBitmap().apply(requestOptions).load(videos.get(position).isNull()?R.color.white:videos.get(position).getUri()).into(itemVideoVideoBinding.ivVideo);
                 if(!videos.get(position).isNull()){
                     itemVideoVideoBinding.getRoot().setOnClickListener(this);
                     itemVideoVideoBinding.getRoot().setClickable(true);

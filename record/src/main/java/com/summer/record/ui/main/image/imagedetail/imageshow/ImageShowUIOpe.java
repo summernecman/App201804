@@ -10,7 +10,11 @@ import com.summer.record.databinding.FragMainImageImagedetailImageBinding;
 public class ImageShowUIOpe extends BaseUIOpe<FragMainImageImagedetailImageBinding> {
 
     public void showImage(Record image){
-        GlideApp.with(getActivity()).asBitmap().centerInside().load(image.getLocpath()).into(getBind().ivImage);
+        if(image.getLocpath().toLowerCase().endsWith("gif")){
+            GlideApp.with(getActivity()).asGif().centerInside().load(image.getLocpath()).into(getBind().ivImage);
+        }else{
+            GlideApp.with(getActivity()).asBitmap().centerInside().load(image.getLocpath()).into(getBind().ivImage);
+        }
 
     }
 }

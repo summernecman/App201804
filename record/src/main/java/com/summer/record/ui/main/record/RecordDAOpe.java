@@ -81,6 +81,7 @@ public class RecordDAOpe extends BaseDAOpe {
     }
 
     public void getImages(final Context context, final OnFinishWithObjI i){
+
         new AsyncTask<String, String, ArrayList<Record>>() {
             @Override
             protected ArrayList<Record> doInBackground(String... strings) {
@@ -155,8 +156,13 @@ public class RecordDAOpe extends BaseDAOpe {
             }
             v.addAll(map.get(ss.get(i)));
         }
+        int j=0;
         for(int i =0;i<v.size();i++){
             v.get(i).setId(i);
+            if(v.get(i).getLocpath()!=null){
+                v.get(i).setPos(j);
+                j++;
+            }
         }
         return v;
     }

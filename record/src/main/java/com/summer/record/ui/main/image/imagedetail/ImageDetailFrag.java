@@ -37,4 +37,9 @@ public class ImageDetailFrag extends BaseUIFrag<ImageDetailUIOpe,ImageDetailDAOp
     public int getBaseUILayout() {
         return R.layout.frag_base;
     }
+
+    @Override
+    protected int delayTime() {
+        return 210;
+    }
 }

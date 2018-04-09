@@ -36,11 +36,13 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
     @Override
     public void initdelay() {
         super.initdelay();
+        startLoading();
         getP().getD().getVideos(getBaseAct(), new OnFinishWithObjI() {
             @Override
             public void onNetFinish(Object o) {
                 getP().getD().setRecords((ArrayList<Record>) o);
                 getP().getU().loadVideos(getP().getD().getRecords(),VideoFrag.this);
+                stopLoading();
             }
         });
 
@@ -128,6 +130,10 @@ public class VideoFrag extends BaseUIFrag<VideoUIOpe,RecordDAOpe> implements Vie
     public void onInterupt(int i, View view) {
         switch (i){
             case ViewListener.TYPE_ONCLICK:
+                Record record = (Record) view.getTag(R.id.data);
+                if(record.getLocpath()==null){
+                    return;
+                }
                 FragManager2.getInstance().start(getBaseUIAct(), MainValue.视频, VideoPlayFrag.getInstance((Record) view.getTag(R.id.data)));
                 break;
         }
